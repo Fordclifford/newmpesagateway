@@ -19,3 +19,4 @@ repos/
 smsmoduledb.*
 
 !gradle/wrapper/gradle-wrapper.jar
+/.nb-gradle/

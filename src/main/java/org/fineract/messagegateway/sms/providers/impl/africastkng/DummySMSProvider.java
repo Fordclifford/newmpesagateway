@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.fineract.messagegateway.sms.providers.impl.dummy;
+package org.fineract.messagegateway.sms.providers.impl.africastkng;
 
 import java.util.Date;
 

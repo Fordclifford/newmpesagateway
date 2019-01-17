@@ -70,11 +70,15 @@ public class SmsBridgeSerializer {
 		
 		final String providerKey = this.fromApiJsonHelper.extractStringNamed(SmsConstants.providerkey_paramname, element);
 		baseDataValidator.reset().parameter(SmsConstants.providerkey_paramname).value(providerKey).notBlank();
+                
+                final String tenantKeyword = this.fromApiJsonHelper.extractStringNamed(SmsConstants.tenantKeyword_paramname, element);
+		baseDataValidator.reset().parameter(SmsConstants.tenantKeyword_paramname).value(tenantKeyword).notBlank();
+		
 		
 		final String providerDescription = this.fromApiJsonHelper.extractStringNamed(SmsConstants.providerdescription_paramname, element);
 		baseDataValidator.reset().parameter(SmsConstants.providerdescription_paramname).value(providerDescription).notBlank();
 		
-		SMSBridge bridge = new SMSBridge(tenant.getId(), phoneNumber, providerName, providerKey, countryCode, providerDescription) ;
+		SMSBridge bridge = new SMSBridge(tenant.getId(), phoneNumber, providerName, providerKey, countryCode, providerDescription,tenantKeyword) ;
 		
 		JsonArray configParams = this.fromApiJsonHelper.extractJsonArrayNamed(SmsConstants.bridgeconfigurations_paramname, element);
 		baseDataValidator.reset().parameter(SmsConstants.bridgeconfigurations_paramname).value(configParams).jsonArrayNotEmpty();
@@ -127,6 +131,13 @@ public class SmsBridgeSerializer {
 			 final String countryCode = this.fromApiJsonHelper.extractStringNamed(SmsConstants.countrycode_paramname, element);
 				baseDataValidator.reset().parameter(SmsConstants.countrycode_paramname).value(countryCode).notBlank();
 				bridge.setCountryCode(countryCode);
+				
+		 }
+                 
+                  if(this.fromApiJsonHelper.parameterExists(SmsConstants.tenantKeyword_paramname, element)) {
+			 final String tenantKeyword = this.fromApiJsonHelper.extractStringNamed(SmsConstants.tenantKeyword_paramname, element);
+				baseDataValidator.reset().parameter(SmsConstants.tenantKeyword_paramname).value(tenantKeyword).notBlank();
+				bridge.setTenantKeyword(tenantKeyword);
 				
 		 }
 		 

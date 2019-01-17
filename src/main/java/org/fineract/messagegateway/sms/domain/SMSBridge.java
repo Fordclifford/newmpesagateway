@@ -40,6 +40,9 @@ public class SMSBridge extends AbstractPersistableCustom<Long> {
 
 	@Column(name = "tenant_phone_no", nullable = false)
 	private String phoneNo;
+        
+        @Column(name = "tenant_keyword", nullable = true)
+	private String tenantKeyword;
 
 	@Column(name = "provider_name", nullable = false)
 	private String providerName;
@@ -58,7 +61,8 @@ public class SMSBridge extends AbstractPersistableCustom<Long> {
 	@Column(name = "last_modified_on", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedOnDate;
-	
+        
+       
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	@Column(name = "provider_key", nullable = true) //This key is useful to load the actual implementation 
 	private String providerKey ; 
@@ -75,13 +79,14 @@ public class SMSBridge extends AbstractPersistableCustom<Long> {
 		this.tenantId = tenantId ;
 	}
 	
-	public SMSBridge(final Long tenantId, final String phoneNo, final String providerName, final String providerKey, final String countryCode, final String providerDescription) {
+	public SMSBridge(final Long tenantId, final String phoneNo, final String providerName, final String providerKey, final String countryCode, final String providerDescription,final String tenantKeyword) {
 		this.tenantId = tenantId ;
 		this.phoneNo = phoneNo ;
 		this.providerName = providerName ;
 		this.providerKey = providerKey ;
 		this.countryCode = countryCode ;
 		this.providerDescription = providerDescription ;
+                this.tenantKeyword = tenantKeyword;
 	}
 	
 	public void setTenantId(final Long tenantId) {
@@ -127,6 +132,14 @@ public class SMSBridge extends AbstractPersistableCustom<Long> {
 	public String getProviderDescription() {
 		return this.providerDescription ;
 	}
+
+    public String getTenantKeyword() {
+        return tenantKeyword;
+    }
+
+    public void setTenantKeyword(String tenantKeyword) {
+        this.tenantKeyword = tenantKeyword;
+    }
 	
 	public Collection<SMSBridgeConfig> getBridgeConfigurations() {
 		return this.bridgeConfigurations ;

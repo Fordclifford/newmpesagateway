@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven { url "http://repo.spring.io/libs-release" }
-        mavenLocal()
+                 mavenLocal()
         mavenCentral()
     }
     dependencies {
@@ -24,10 +24,13 @@ if (project.hasProperty('profile')
 }
 
 repositories {
+     maven {  url  "http://dl.bintray.com/africastalking/java"  }
     mavenLocal()
     mavenCentral()
+     
     maven { url "http://repo.spring.io/libs-release" }
     maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
+        
 }
 
 license {
@@ -42,6 +45,7 @@ task licenseFormatBuildScripts (type:nl.javadude.gradle.plugins.license.License)
 licenseFormat.dependsOn licenseFormatBuildScripts
 
 dependencies {
+    compile 'com.africastalking:core:3.4.0'
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")

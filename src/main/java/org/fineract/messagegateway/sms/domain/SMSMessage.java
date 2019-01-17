@@ -41,8 +41,8 @@ public class SMSMessage extends AbstractPersistableCustom<Long> {
 
 	@Column(name = "internal_id", nullable = false)
 	private Long internalId;
-
-	@Column(name = "submitted_on_date", nullable = true)
+        
+      	@Column(name = "submitted_on_date", nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date submittedOnDate;
 
@@ -50,7 +50,7 @@ public class SMSMessage extends AbstractPersistableCustom<Long> {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date deliveredOnDate;
 
-	@Column(name = "delivery_status", nullable = false)
+	@Column(name = "delivery_status", nullable = true)
 	private Integer deliveryStatus = SmsMessageStatusType.PENDING.getValue();
 
 	@Column(name = "delivery_error_message", nullable = true)
@@ -87,6 +87,8 @@ public class SMSMessage extends AbstractPersistableCustom<Long> {
 		this.mobileNumber = mobileNumber;
 		this.message = message;
 		this.bridgeId = bridgeId;
+                
+                
 	}
 
 	public static SMSMessage getPendingMessages(final String externalId, final Long internalId,
@@ -103,7 +105,7 @@ public class SMSMessage extends AbstractPersistableCustom<Long> {
 	 * @return an instance of the SmsOutboundMessage class
 	 **/
 	public SMSMessage getInstance(final String externalId, final Long internalId, final Long tenantId,
-			final Date submittedOnDate, final Date deliveredOnDate,
+			final Date submittedOnDate, final String tenantKeyword,final Date deliveredOnDate,
 			final SmsMessageStatusType deliveryStatus, final String deliveryErrorMessage, final String sourceAddress,
 			final String mobileNumber, final String message, final Long providerId) {
 
@@ -128,7 +130,7 @@ public class SMSMessage extends AbstractPersistableCustom<Long> {
 		this.internalId = internalId;
 	}
 
-	public Long getTenantId() {
+         public Long getTenantId() {
 		return tenantId;
 	}
 

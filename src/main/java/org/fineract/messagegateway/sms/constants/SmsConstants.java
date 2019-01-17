@@ -28,6 +28,8 @@ import org.fineract.messagegateway.constants.MessageGatewayConstants;
 public interface SmsConstants extends MessageGatewayConstants{
 
 	String tenantId_paramname = "tenantId";
+        
+        String tenantKeyword_paramname = "tenantKeyword";
 
 	String phoneNo_paramname = "phoneNo" ;
 
@@ -47,6 +49,6 @@ public interface SmsConstants extends MessageGatewayConstants{
 	
 	String configvalue_paramname = "configValue" ;
 	
-	Set<String> supportedParameters = new HashSet<>(Arrays.asList(phoneNo_paramname,
+	Set<String> supportedParameters = new HashSet<>(Arrays.asList(phoneNo_paramname,tenantKeyword_paramname,
 			providername_paramname, providerkey_paramname, countrycode_paramname, providerdescription_paramname, bridgeconfigurations_paramname, configvalue_paramname));
 }
