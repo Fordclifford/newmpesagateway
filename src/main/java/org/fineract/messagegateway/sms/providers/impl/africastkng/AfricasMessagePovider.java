@@ -42,80 +42,107 @@ import java.util.logging.Level;
 @Service(value = "Africastkng")
 public class AfricasMessagePovider extends SMSProvider {
 
-	private static final Logger logger = LoggerFactory.getLogger(AfricasMessagePovider.class);
+    public String msgId;
+    public String status;
+     public String no;
 
-	//private HashMap<String, SendMultipleTextualSmsAdvanced> restClients = new HashMap<>() ; //tenantId, twilio clients
-	//private final String callBackUrl ;
-	 
-	private final StringBuilder builder ;
-        
-         public static void log(String message) {
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    
+
+    private static final Logger logger = LoggerFactory.getLogger(AfricasMessagePovider.class);
+
+    //private HashMap<String, SendMultipleTextualSmsAdvanced> restClients = new HashMap<>() ; //tenantId, twilio clients
+    //private final String callBackUrl ;
+    private final StringBuilder builder;
+
+    public static void log(String message) {
         System.out.println(message);
     }
-	  
-	@Autowired
-	public AfricasMessagePovider(final HostConfig hostConfig) {
-		//callBackUrl = String.format("%s://%s:%d/infobip/report/", hostConfig.getProtocol(),  hostConfig.getHostName(), hostConfig.getPort());
-    	//logger.info("Registering call back to InfoBip:"+callBackUrl);
-    	builder = new StringBuilder() ;
-	}
 
-	@Override
-	public void sendMessage(SMSBridge smsBridgeConfig, SMSMessage message) throws MessageGatewayException {
-            //String statusCallback = callBackUrl+message.getId() ;
-            //Based on message id, register call back. so that we get notification from Infobip about message status
-            //SendMultipleTextualSmsAdvanced client = getRestClient(smsBridgeConfig) ;
-            //Destination destination = new Destination();
-            
-            String userName = smsBridgeConfig.getConfigValue(MessageGatewayConstants.PROVIDER_ACCOUNT_ID) ;
-            String password = smsBridgeConfig.getConfigValue(MessageGatewayConstants.PROVIDER_AUTH_TOKEN) ;
-            AfricasTalking.initialize(userName, password);
-            builder.setLength(0);
-            builder.append(smsBridgeConfig.getCountryCode()) ;
-            builder.append(message.getMobileNumber()) ;
-            String mobile = builder.toString() ;
-            logger.info("Sending SMS to " + mobile + " ...");
-            SmsService sms = AfricasTalking.getService(AfricasTalking.SERVICE_SMS);
-            try {
-                List<Recipient> response = sms.send(message.getMessage(),  smsBridgeConfig.getTenantKeyword(),  new String[] {mobile},  false);
-                for (Recipient recipient : response) {
-                    
-                    System.out.print(recipient.number);
-                    System.out.print(" : ");
-                    System.out.println(recipient.status);
-                    System.out.println(recipient.messageId);
-                    message.setExternalId(recipient.messageId);
-                    String status = recipient.status;
-                    if ("Success".equals(status)){
-                        message.setDeliveryStatus(300);
-                    }
-                    
-                    if ("Sent".equals(recipient.status)){
-                        message.setDeliveryStatus(200);
-                    }
-                   
-                      if ("Failed".equals(status)){
-                        message.setDeliveryStatus(400);
-                    }
-                      
-                      if ("Submitted".equals(status)){
-                        message.setDeliveryStatus(100);
-                    }
-                      
-                      else {
-                          message.setDeliveryStatus(300);
-                      }
-            
-            
-                }
-            } catch(Exception ex) {
-                ex.printStackTrace();
+    @Autowired
+    public AfricasMessagePovider(final HostConfig hostConfig) {
+        //callBackUrl = String.format("%s://%s:%d/infobip/report/", hostConfig.getProtocol(),  hostConfig.getHostName(), hostConfig.getPort());
+        //logger.info("Registering call back to InfoBip:"+callBackUrl);
+        builder = new StringBuilder();
+    }
+
+    @Override
+    public void sendMessage(SMSBridge smsBridgeConfig, SMSMessage message) throws MessageGatewayException {
+        //String statusCallback = callBackUrl+message.getId() ;
+        //Based on message id, register call back. so that we get notification from Infobip about message status
+        //SendMultipleTextualSmsAdvanced client = getRestClient(smsBridgeConfig) ;
+        //Destination destination = new Destination();
+
+        String userName = smsBridgeConfig.getConfigValue(MessageGatewayConstants.PROVIDER_ACCOUNT_ID);
+        String password = smsBridgeConfig.getConfigValue(MessageGatewayConstants.PROVIDER_AUTH_TOKEN);
+        AfricasTalking.initialize(userName, password);
+        builder.setLength(0);
+        
+     String  mbl;
+        mbl = message.getMobileNumber().substring(message.getMobileNumber().length() - 9);
+        builder.append(smsBridgeConfig.getCountryCode());
+        builder.append(mbl);
+                
+        String mobile = builder.toString();
+        logger.info("Sending SMS to " + mobile + " ...");
+        SmsService sms = AfricasTalking.getService(AfricasTalking.SERVICE_SMS);
+        try {
+            List<Recipient> response = sms.send(message.getMessage(), smsBridgeConfig.getTenantKeyword(), new String[]{mobile}, false);
+            for (Recipient recipient : response) {
+                
+                msgId = recipient.messageId;
+                status = recipient.status;
+                no = recipient.status;
+
+               
+            }            
+                System.out.print(no);
+                System.out.print(" : ");
+                System.out.println(status);
+                System.out.println(msgId);
+                
+            message.setExternalId(msgId);
+
+            if ("Success".equals(status)) {
+                message.setDeliveryStatus(300);
             }
-            
-            
-            //destination.setTo(mobile);
-            //logger.debug("InfoBipMessageProvider.sendMessage():"+AfricasStatus.smsStatus(sentMessageInfo.getStatus().getGroupId()).getValue());
 
-	}
-	
+            if ("Sent".equals(status)) {
+                message.setDeliveryStatus(200);
+            }
+
+            if ("Failed".equals(status)) {
+                message.setDeliveryStatus(400);
+            }
+
+            if ("Submitted".equals(status)) {
+                message.setDeliveryStatus(100);
+            } else {
+                message.setDeliveryStatus(300);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        //destination.setTo(mobile);
+        //logger.debug("InfoBipMessageProvider.sendMessage():"+AfricasStatus.smsStatus(sentMessageInfo.getStatus().getGroupId()).getValue());
+    }
+
 }

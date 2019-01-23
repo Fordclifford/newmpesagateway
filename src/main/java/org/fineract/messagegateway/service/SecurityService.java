@@ -30,6 +30,7 @@ import org.fineract.messagegateway.tenants.service.TenantsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -42,7 +43,7 @@ public class SecurityService {
     private TenantRepository tenantRepository ;
     
     @Autowired
-    private TenantsService tenantService ;
+    private @Lazy TenantsService tenantService ;
     
     public SecurityService() {
         super();
