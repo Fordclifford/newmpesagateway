@@ -18,6 +18,9 @@
  */
 package org.fineract.messagegateway.sms.util;
 
+import org.fineract.messagegateway.sms.service.SMSMessageService;
+import org.slf4j.Logger;
+
 /** 
  * SMS message delivery status predefined enum constants
  **/
@@ -41,7 +44,7 @@ public enum SmsMessageStatusType {
     public static SmsMessageStatusType fromInt(final Integer statusValue) {
 
         SmsMessageStatusType enumeration = SmsMessageStatusType.INVALID;
-        
+              
         switch (statusValue) {
             case 100:
                 enumeration = SmsMessageStatusType.PENDING;

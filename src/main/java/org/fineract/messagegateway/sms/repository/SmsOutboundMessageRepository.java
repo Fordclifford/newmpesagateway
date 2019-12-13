@@ -56,4 +56,9 @@ public interface SmsOutboundMessageRepository extends JpaRepository<SMSMessage, 
 	 * @return List of {@link SmsMessageStatusType} objects
 	 **/
 	List<SMSMessage> findByIdInAndTenantId(List<Long> idList, String mifosTenantIdentifier);
+        
+   
+
+        
+        
 }

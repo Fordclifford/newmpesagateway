@@ -34,10 +34,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.africastalking.*;
+import com.africastalking.sms.FetchMessageResponse;
 import com.africastalking.sms.Recipient;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
+import org.fineract.messagegateway.sms.util.SmsMessageStatusType;
 
 @Service(value = "Africastkng")
 public class AfricasMessagePovider extends SMSProvider {
@@ -45,25 +47,7 @@ public class AfricasMessagePovider extends SMSProvider {
     public String msgId;
     public String status;
      public String no;
-
-
-    public String getMsgId() {
-        return msgId;
-    }
-
-    public void setMsgId(String msgId) {
-        this.msgId = msgId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    
-    
+     private Integer statusCode;
 
     private static final Logger logger = LoggerFactory.getLogger(AfricasMessagePovider.class);
 
@@ -106,37 +90,37 @@ public class AfricasMessagePovider extends SMSProvider {
             List<Recipient> response = sms.send(message.getMessage(), smsBridgeConfig.getTenantKeyword(), new String[]{mobile}, false);
             for (Recipient recipient : response) {
                 
-                msgId = recipient.messageId;
+                 msgId = recipient.messageId;
                 status = recipient.status;
                 no = recipient.status;
-
-               
-            }            
-                System.out.print(no);
-                System.out.print(" : ");
-                System.out.println(status);
-                System.out.println(msgId);
                 
-            message.setExternalId(msgId);
+                System.out.println(status);
+                 System.out.println(no);
+               
+                
+              message.setExternalId(msgId);
+              message.setDeliveryErrorMessage(status);
 
             if ("Success".equals(status)) {
                 message.setDeliveryStatus(300);
-            }
+            }else
 
             if ("Sent".equals(status)) {
                 message.setDeliveryStatus(200);
-            }
+            }else
 
             if ("Failed".equals(status)) {
                 message.setDeliveryStatus(400);
-            }
+            }else
 
             if ("Submitted".equals(status)) {
                 message.setDeliveryStatus(100);
-            } else {
-                message.setDeliveryStatus(300);
             }
-
+            else {
+                message.setDeliveryStatus(0);
+            }   
+            }
+               
         } catch (Exception ex) {
             ex.printStackTrace();
         }
